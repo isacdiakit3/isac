@@ -12,7 +12,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -30,9 +29,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm install -g pm2
         npm install
+        npm install -g pm2
 
-    - name: Start application with timeout
+    - name: Start application with PM2
       run: |
-        timeout 14520s npm run zokou
+        pm2 start npm --name "zokou-2.0" -- run zokou
+        pm2 save
+        pm2 startup
+
+    - name: Monitor application
+      run: |
+        pm2 monit
